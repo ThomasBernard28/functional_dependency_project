@@ -21,7 +21,9 @@ def connection(dbName):
             dbConnection.close()
             print("The SQLite connection is closed")
 
-def createTable(dbName, tableName, pkList, uniqueList, argsList)
+connection("DATABANANA")
+'''
+def createTable(dbName, tableName, pkList, uniqueList, argsList):
     try:
         dbConnection = connect(dbName)
         dbCreateTableQuery = "CREATE TABLE CINEMAS (
@@ -42,4 +44,4 @@ def createTable(dbName, tableName, pkList, uniqueList, argsList)
         if dbConnection:
             dbConnection.close()
             print("SQLite connection is closed")
-
+'''
