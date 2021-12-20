@@ -1,16 +1,20 @@
 from sqlite3 import *
-from dbFunctions import *
 
-try:
+try: 
     dbConnection = connect('DATABANANA')
-    dbCreateTableQuery =  '''CREATE TABLE SNCB (
-                           CinemaNom TEXT NOT NULL,
-                           Rue TEXT NOT NULL,
-                           Ville TEXT NOT NULL,
-                           Téléphone INTEGER NOT NULL,
-                           Titre TEXT NOT NULL,
-                           Régisseur TEXT NOT NULL,
-                           Durée INTEGER NOT NULL,
-                           Heure INTEGER NOT NULL);'''
+    dbQuery = '''CREATE TABLE SNCB (
+                Tel TEXT PRIMARY KEY,
+                Ville TEXT NOT NULL);'''
 
+    cursor = dbConnection.cursor()
 
+    cursor.execute(dbQuery)
+    dbConnection.commit()
+
+    cursor.close()
+
+except Error as error:
+    print("Error while creating SQLite Table" , error)
+finally:
+    if dbConnection:
+        dbConnection.close()

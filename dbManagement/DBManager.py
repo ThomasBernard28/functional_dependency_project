@@ -20,9 +20,9 @@ class DBManager:
         
     def showTable(self, table):
         try:
-            dbSelectQuery = """SELECT * FROM""" + table
+            dbSelectQuery = """SELECT * FROM """ + table
             self.cursor.execute(dbSelectQuery)
-            records = cursor.fetchall()
+            records = self.cursor.fetchall()
             print(records)
 
         except Error as error:
