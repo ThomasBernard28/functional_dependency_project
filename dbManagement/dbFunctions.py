@@ -1,47 +1,45 @@
 from sqlite3 import *
-
 #Code from https://pynative.com/python-sqlite/
 def connection(dbName):
     try:
         
         dbConnection = connect(dbName)
         cursor = dbConnection.cursor()
-        print("Database created and successfully connected to SQLite")
 
-        dbQuerySelection = "select sqlite_version()"
-        cursor.execute(dbQuerySelection)
-        record = cursor.fetchall()
-        print("SQLite Database Version is: " , record)
-        cursor.close()
+        return dbConnection , cursor
 
     except Error as error:
-        print("Error while connecting to sqlite", record)
+        print("Error while connecting to sqlite")
+
+
+def deconnection():
+    cursor.close()
+    dbConnection.close()
+        
+def readSqliteTable():
+    dbConnection(dbName)
+    try:
+        dbSelectQuery = """SELECT * SNCB"""
+        cursor.execute(dbSelectQuery)
+        records = cursor.fetchall()
+        print("Total rows are:  ", len(records))
+        print("Printing each row")
+        for row in records:
+            print("CinemaNom ", row[0])
+            print("Rue: ", row[1])
+            print("Ville: ", row[2])
+            print("Téléphonne: ", row[3])
+            print("Titre: ", row[4])
+            print("")
+            print("\n")
+
+        cursor.close()
+
+    except sqlite3.Error as error:
+        print("Failed to read data from sqlite table", error)
     finally:
-        if dbConnection:
-            dbConnection.close()
+        if sqliteConnection:
+            sqliteConnection.close()
             print("The SQLite connection is closed")
 
-connection("DATABANANA")
-'''
-def createTable(dbName, tableName, pkList, uniqueList, argsList):
-    try:
-        dbConnection = connect(dbName)
-        dbCreateTableQuery = "CREATE TABLE CINEMAS (
-                              CinemaNom text, Ville text PRIMARY KEY,
-                              Rue text NOT NULL);"
-
-        cursor = dbConnection.cursor()
-        print("Successfully Connected to SQLite")
-        cursor.execute(dbCreateTableQuery)
-        dbConnection.commit()
-        print("SQLite table created")
-
-        cursor.close()
-
-    except Error as error:
-        print("Error while creating a sqlite table", error)
-    finally:
-        if dbConnection:
-            dbConnection.close()
-            print("SQLite connection is closed")
-'''
+readSqliteTable()
