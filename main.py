@@ -1,4 +1,5 @@
 import click
+from dbManagement.DBManager import *
 
 @click.group()
 def main():
@@ -7,9 +8,13 @@ def main():
     thomas.BERNARD@student.umons.ac.be - theo.GODIN@student.umons.ac.be
     """
 
-@main.command("example")
-def example():
-    click.echo("This is an example.")
+@main.command("showtable")
+@click.option("--db")
+@click.option("--table")
+def showtable(db, table):
+    dbm = DBManager(db)
+    dbm.showTable(table)
+    dbm.disconnect()
 
 if __name__ == '__main__':
     main()
