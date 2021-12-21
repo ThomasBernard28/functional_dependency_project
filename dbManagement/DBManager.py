@@ -84,7 +84,14 @@ class DBManager:
             if records == []:
                 raise exception("No DF defined for this table. You can create them with our application")
             else:
-                print(records)
+                return records
 
         except Error as error:
             print("Failed to read data from sqlite table", error)
+
+    def displayDF(self, tableName):
+            records = self.getAllDF(tableName)
+            result = "Here are all the DF(s) of the "+records[0][0]+ " table :\n"
+            for DF in records : 
+                result += DF[1] + " -----> " + DF[2] + "\n"
+            print(result)
