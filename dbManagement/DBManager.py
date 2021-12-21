@@ -25,7 +25,8 @@ class DBManager:
         try:
             self.cur.execute("""SELECT * FROM """ + table)
             records = self.cur.fetchall()
-
+            if records == []:
+                return "The table is empty"
             return records
 
         except Error as error:
@@ -36,9 +37,14 @@ class DBManager:
         try:
             self.cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
             records = self.cur.fetchall()
-            if 'FuncDep' in records:
+            FuncDepExist = False
+            for tables in records:
+                if tables != [] and 'FuncDep' in tables:
+                    FuncDepExist = True
+
+            if FuncDepExist:
                 print("FuncDep is detected in your database")
-                self.cur.execute("INSERT INTO FuncDep (tableName, lhs, rhs) VALUES ({0}, {1}, {2})".format(tableName, lhs, rhs))
+                self.cur.execute("INSERT INTO FuncDep (tableName, lhs, rhs) VALUES (?, ?, ?)" , (tableName, lhs, rhs))
                 self.conn.commit()
                 print("Your DF was successfully added to the dfTable in your database")
 
@@ -46,7 +52,7 @@ class DBManager:
                 print("creating a new FuncDep table in your database")
                 self.cur.execute(f"CREATE TABLE FuncDep (tableName TEXT NOT NULL, lhs TEXT NOT NULL, rhs TEXT NOT NULL)")
 
-                self.cur.execute(f"INSERT INTO FuncDep (tableName, lhs, rhs) VALUES (?,?,?)", (tableName, lhs, rhs))
+                self.cur.execute("INSERT INTO FuncDep (tableName, lhs, rhs) VALUES (?,?,?)", (tableName, lhs, rhs))
 
                 self.conn.commit()
                 print("Your DF was successfully added to the new dfTable in your database")
