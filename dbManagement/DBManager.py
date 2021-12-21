@@ -63,9 +63,28 @@ class DBManager:
 
     def deleteDF(self, tableName, lhs, rhs):
         try:
-            self.cur.execute("DELETE FROM FuncDep WHERE tableName=\'{0}\' AND lhs=\'{1}\' AND rhs=\'{2}\'".format(tableName, lhs, rhs))
-            self.conn.commit()
-            print("The DF was successfully deleted from the df table")
+            self.cur.execute("SELECT * FROM FuncDep WHERE tableName=\'{0}\' AND lhs=\'{1}\' AND rhs=\'{2}\'".format(tableName, lhs, rhs))
+            records = self.cur.fetchall()
+            if records == []:
+                print("i'm here")
+                raise exception("The DF you tried to remove does not exist, please try with other arguments")
+            else:
+                self.cur.execute("DELETE FROM FuncDep WHERE tableName=\'{0}\' AND lhs=\'{1}\' AND rhs=\'{2}\'".format(tableName, lhs, rhs))
+                self.conn.commit()
+                print("The DF was successfully deleted from the df table")
 
         except Error as error :
-            print("The DF you tried to remove does not exist, please try with other arguments")
+            print("The DB your entered does not exist.")
+
+
+    def getAllDF(self, tableName):
+        try:
+            self.cur.execute("SELECT * FROM FuncDep WHERE tableName=\'{0}\'".format(tableName))
+            records = self.cur.fetchall()
+            if records == []:
+                raise exception("No DF defined for this table. You can create them with our application")
+            else:
+                print(records)
+
+        except Error as error:
+            print("Failed to read data from sqlite table", error)

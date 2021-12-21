@@ -8,7 +8,7 @@ mainMenu = [
         'type'    : 'list',
         'name'    : 'userOption',
         'message' : 'Welcome to functional dependency project',
-        'choices' : ["showTable", "addDF", "deleteDF", "quit"]
+        'choices' : ["showTable", "addDF", "deleteDF","checkDF", "quit"]
     }
 ]
 
@@ -52,6 +52,20 @@ DFMenu = [
     }
 ]
 
+checkDFMenu = [
+    {
+        'type'    : 'input',
+        'name'    : 'db',
+        'message' : 'Enter the data base name'
+    },
+
+    {
+        'type'    : 'input',
+        'name'    : 'table',
+        'message' : 'Enter the table name'
+    }
+]
+
 def main():
     answer1 = prompt(mainMenu)
 
@@ -82,6 +96,14 @@ def main():
         rhs     = answer2.get("rhs")
         dbm     = DBManager(db)
         dbm.deleteDF(table, lhs, rhs)
+        dbm.disconnect()
+
+    elif answer1.get("userOption") == "checkDF":
+        answer2 = prompt(checkDFMenu)
+        db      = answer2.get("db")
+        table   = answer2.get("table")
+        dbm     = DBManager(db)
+        dbm.getAllDF(table)
         dbm.disconnect()
 
     elif answer1.get("userOption") == "quit":
