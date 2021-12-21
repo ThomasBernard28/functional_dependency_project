@@ -29,14 +29,14 @@ showTableMenu = [
 DFMenu = [
     {
         'type'    : 'input',
-        'name'    : 'dftable',
-        'message' : 'Enter the DF table name'
+        'name'    : 'db',
+        'message' : 'Enter the data base name'
     },
 
     {
         'type'    : 'input',
-        'name'    : 'db',
-        'message' : 'Enter the data base name'
+        'name'    : 'dftable',
+        'message' : 'Enter the DF table name'
     },
 
     {
@@ -72,8 +72,8 @@ def main():
 
     elif answer1.get("userOption") == "addDF":
         answer2 = prompt(DFMenu)
-        dfTable = answer2.get("dftable")
         db      = answer2.get("db")
+        dfTable = answer2.get("dftable")
         table   = answer2.get("table")
         lhs     = answer2.get("lhs")
         rhs     = answer2.get("rhs")
