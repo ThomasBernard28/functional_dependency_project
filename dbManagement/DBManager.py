@@ -31,4 +31,43 @@ class DBManager:
             return records
 
         except Error as error:
-            print("Failed to read data from sqlite table", error) 
+            print("Failed to read data from sqlite table", error)
+
+    def addDF(self, tableName, lhs, rhs):
+        try:
+            self.cur.execute("""SHOW TABLES """)
+            records = self.cur.fetchall()
+
+            if dfTable in records:
+                self.cur.execute("INSERT INTO dfTable (tableName, lhs, rhs) VALUES (?,?,?)", (tableName, lhs, rhs))
+
+                self.conn.comit()
+
+
+
+            else:
+                self.cur.execute(" CREATE TABLE dfTable (tableName TEXT, lhs TEXT, rhs TEXT)")
+            
+                self.cur.execute("INSERT INTO dfTable (tableName, lhs, rhs) VALUES (?,?,?)", (tableName, lhs, rhs))
+
+                self.conn.comit()
+
+                print("Your DF was successfully added to the dfTable in your database")
+
+        except Error as error :
+            print("Failed to add your DF, syntax might be incorect please be sure to enter  : tableName \n lhs1 lhs2 lhsn \n rhs")
+        
+        finally :
+                showTable(dfTable)
+
+    def deleteDF(self, tableName, lhs, rhs):
+
+        try:
+            self.curr.execute("DELETE FROM dftable WHERE tableName=\'"+tableName+"\' AND lhs=\'"+lhs+"\' AND rhs=\'" +rhs+"\'")
+
+        except Error as error :
+            print("The DF you tried to remove does not exist, please try with other arguments")
+
+        finally:
+            showTable(dfTable)
+        
