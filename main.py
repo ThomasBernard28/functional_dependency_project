@@ -78,7 +78,7 @@ def main():
         lhs     = answer2.get("lhs")
         rhs     = answer2.get("rhs")
         dbm     = DBManager(db)
-        dbm.addDF(table, lhs, rhs)
+        dbm.addDF(dftable, table, lhs, rhs)
         dbm.disconnect()
 
     elif answer1.get("userOption") == "deleteDF":
