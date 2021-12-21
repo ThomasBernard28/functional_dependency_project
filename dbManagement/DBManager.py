@@ -35,39 +35,39 @@ class DBManager:
 
     def addDF(self, tableName, lhs, rhs):
         try:
-            self.cur.execute("""SHOW TABLES """)
+            getTablesQuery = """SELECT name FROM sqlite_master WHERE type='table';"""
+            self.cur.execute(getTablesQuery)
             records = self.cur.fetchall()
 
-            if dfTable in records:
+            if "dfTable" in records:
                 self.cur.execute("INSERT INTO dfTable (tableName, lhs, rhs) VALUES (?,?,?)", (tableName, lhs, rhs))
-
-                self.conn.comit()
+                
+                self.conn.commit()
 
 
 
             else:
-                self.cur.execute(" CREATE TABLE dfTable (tableName TEXT, lhs TEXT, rhs TEXT)")
-            
+                #self.curr = self.conn.cursor()
+                print("Creating dfTable")
+                self.cur.execute("CREATE TABLE dfTable (tableName TEXT, lhs TEXT, rhs TEXT)")
+                
+                #self.curr = self.conn.cursor()
+
                 self.cur.execute("INSERT INTO dfTable (tableName, lhs, rhs) VALUES (?,?,?)", (tableName, lhs, rhs))
 
-                self.conn.comit()
+                self.conn.commit()
 
                 print("Your DF was successfully added to the dfTable in your database")
 
         except Error as error :
             print("Failed to add your DF, syntax might be incorect please be sure to enter  : tableName \n lhs1 lhs2 lhsn \n rhs")
         
-        finally :
-                showTable(dfTable)
-
     def deleteDF(self, tableName, lhs, rhs):
 
         try:
-            self.curr.execute("DELETE FROM dftable WHERE tableName=\'"+tableName+"\' AND lhs=\'"+lhs+"\' AND rhs=\'" +rhs+"\'")
-
+            self.cur.execute("DELETE FROM dftable WHERE tableName=\'"+tableName+"\' AND lhs=\'"+lhs+"\' AND rhs=\'" +rhs+"\'")
+            self.conn.commit()
+            print("The DF was successfully deleted from the df table")
         except Error as error :
             print("The DF you tried to remove does not exist, please try with other arguments")
 
-        finally:
-            showTable(dfTable)
-        
