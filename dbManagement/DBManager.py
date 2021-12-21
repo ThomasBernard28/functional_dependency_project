@@ -32,14 +32,14 @@ class DBManager:
             print("Failed to read data from sqlite table", error)
 
 
-    def addDF(self, tableName, lhs, rhs):
+    def addDF(self, dfTableName, tableName, lhs, rhs):
         try:
             getTablesQuery = """SELECT name FROM sqlite_master WHERE type='table';"""
             self.cur.execute(getTablesQuery)
             records = self.cur.fetchall()
 
-            if "dfTable" in records:
-                self.cur.execute("INSERT INTO dfTable (tableName, lhs, rhs) VALUES (?,?,?)", (tableName, lhs, rhs))
+            if dfTableName in records:
+                self.cur.execute("INSERT INTO " + dfTableName + " (tableName, lhs, rhs) VALUES (?,?,?)", (tableName, lhs, rhs))
                 self.conn.commit()
 
             else:
@@ -52,11 +52,13 @@ class DBManager:
             print("Failed to add your DF, syntax might be incorect please be sure to enter  : tableName \n lhs1 lhs2 lhsn \n rhs")
         
 
-    def deleteDF(self, tableName, lhs, rhs):
+    def deleteDF(self, dfTableName, tableName, lhs, rhs):
         try:
-            self.cur.execute("DELETE FROM dftable WHERE tableName=\'"+tableName+"\' AND lhs=\'"+lhs+"\' AND rhs=\'" +rhs+"\'")
+            self.cur.execute("DELETE FROM "+ dfTableName +" WHERE tableName=\'"+tableName+"\' AND lhs=\'"+lhs+"\' AND rhs=\'" +rhs+"\'")
             self.conn.commit()
             print("The DF was successfully deleted from the df table")
 
         except Error as error :
             print("The DF you tried to remove does not exist, please try with other arguments")
+
+    
