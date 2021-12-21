@@ -7,4 +7,4 @@
 - ```python3 unitTest.py``` to run the unit tests.
 
 ## Dependencies
-- ```pip install requirements.txt```
+- ```pip install -r requirements.txt```
