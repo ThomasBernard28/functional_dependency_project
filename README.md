@@ -1,5 +1,5 @@
 # Functional dependency project
-unit tests state : ![](https://github.com/ThomasBernard28/functional_dependency_project/.github/workflows/Python%20application/badge.svg)
+
 ## General infos 
 :warning: This project has only been tested on UNIX-like OS (MacOS and the GNU/Linux distribution fedora).
 
