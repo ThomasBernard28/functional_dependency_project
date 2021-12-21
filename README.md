@@ -1,7 +1,7 @@
-# functional_dependency_project
+# Functional dependency project
 
 ## General infos 
 :warning: This project has only been tested on UNIX-like OS (MacOS and the GNU/Linux distribution fedora).
 
-## dependencies
+## Dependencies
 - ```pip install PyInquirer```
