@@ -84,11 +84,12 @@ def main():
     elif answer1.get("userOption") == "deleteDF":
         answer2 = prompt(DFMenu)  
         db      = answer2.get("db")
+        dfTable = answer2.get("dftable")
         table   = answer2.get("table")
         lhs     = answer2.get("lhs")
         rhs     = answer2.get("rhs")
         dbm     = DBManager(db)
-        dbm.deleteDF(table, lhs, rhs)
+        dbm.deleteDF(dfTable, table, lhs, rhs)
         dbm.disconnect()
 
     elif answer1.get("userOption") == "quit":
