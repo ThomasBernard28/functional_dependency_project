@@ -1,26 +1,92 @@
-import click
 from PyInquirer import prompt
-from prompt_toolkit.validation import Validator, ValidationError
 
 from dbManagement.DBManager import *
 
 
-@click.group()
+mainMenu = [
+    {
+        'type'    : 'list',
+        'name'    : 'userOption',
+        'message' : 'Welcome to functional dependency project',
+        'choices' : ["showTable", "addDF", "deleteDF", "quit"]
+    }
+]
+
+showTableMenu = [
+    {
+        'type'    : 'input',
+        'name'    : 'db',
+        'message' : 'Enter the data base name'
+    },
+
+    {
+        'type'    : 'input',
+        'name'    : 'table',
+        'message' : 'Enter the table name'
+    }
+]
+
+DFMenu = [
+    {
+        'type'    : 'input',
+        'name'    : 'db',
+        'message' : 'Enter the data base name'
+    },
+
+    {
+        'type'    : 'input',
+        'name'    : 'table',
+        'message' : 'Enter table name'
+    },
+
+    {
+        'type'    : 'input',
+        'name'    : 'lhs',
+        'message' : 'Enter lhs'
+    },
+
+    {
+        'type'    : 'input',
+        'name'    : 'rhs',
+        'message' : 'Enter rhs'
+    }
+]
+
 def main():
-    """
-    DB project 2021-2022.\n\n
-    thomas.BERNARD@student.umons.ac.be - theo.GODIN@student.umons.ac.be
-    """
+    answer1 = prompt(mainMenu)
 
+    if answer1.get("userOption") == "showTable":
+        answer2 = prompt(showTableMenu)
+        db      = answer2.get("db")
+        table   = answer2.get("table")
+        dbm     = DBManager(db)
+        for data in dbm.showTable(table):
+            print(data, '\n')
+        dbm.disconnect()
 
-@main.command("showtable")
-@click.option("--db")
-@click.option("--table")
-def showtable(db, table):
-    dbm = DBManager(db)
-    dbm.showTable(table)
-    dbm.disconnect()
+    elif answer1.get("userOption") == "addDF":
+        answer2 = prompt(DFMenu)
+        db      = answer2.get("db")
+        table   = answer2.get("table")
+        lhs     = answer2.get("lhs")
+        rhs     = answer2.get("rhs")
+        dbm     = DBManager(db)
+        dbm.addDF(table, lhs, rhs)
+        dbm.disconnect()
 
+    elif answer1.get("userOption") == "deleteDF":
+        answer2 = prompt(DFMenu)  
+        db      = answer2.get("db")
+        table   = answer2.get("table")
+        lhs     = answer2.get("lhs")
+        rhs     = answer2.get("rhs")
+        dbm     = DBManager(db)
+        dbm.deleteDF(table, lhs, rhs)
+        dbm.disconnect()
+
+    elif answer1.get("userOption") == "quit":
+        return 0
+        
 
 if __name__ == '__main__':
     main()
