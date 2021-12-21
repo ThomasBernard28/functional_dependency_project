@@ -35,12 +35,6 @@ DFMenu = [
 
     {
         'type'    : 'input',
-        'name'    : 'dftable',
-        'message' : 'Enter the DF table name'
-    },
-
-    {
-        'type'    : 'input',
         'name'    : 'table',
         'message' : 'Enter table name'
     },
@@ -73,23 +67,21 @@ def main():
     elif answer1.get("userOption") == "addDF":
         answer2 = prompt(DFMenu)
         db      = answer2.get("db")
-        dfTable = answer2.get("dftable")
         table   = answer2.get("table")
         lhs     = answer2.get("lhs")
         rhs     = answer2.get("rhs")
         dbm     = DBManager(db)
-        dbm.addDF(dfTable, table, lhs, rhs)
+        dbm.addDF(table, lhs, rhs)
         dbm.disconnect()
 
     elif answer1.get("userOption") == "deleteDF":
         answer2 = prompt(DFMenu)  
         db      = answer2.get("db")
-        dfTable = answer2.get("dftable")
         table   = answer2.get("table")
         lhs     = answer2.get("lhs")
         rhs     = answer2.get("rhs")
         dbm     = DBManager(db)
-        dbm.deleteDF(dfTable, table, lhs, rhs)
+        dbm.deleteDF(table, lhs, rhs)
         dbm.disconnect()
 
     elif answer1.get("userOption") == "quit":
