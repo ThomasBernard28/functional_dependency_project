@@ -43,7 +43,7 @@ class DBManager:
                 self.conn.commit()
 
             else:
-                createTableQuery = '''CREATE TABLE {}(tableName TEXT, lhs TEXT, rhs TEXT)'''.format(dfTableName)
+                createTableQuery = f"""CREATE TABLE {dfTableName} (tableName TEXT NOT NULL, lhs TEXT NOT NULL, rhs TEXT NOT NULL)"""
                 self.cur.execute(createTableQuery)
                 self.cur.execute("INSERT INTO "+ dfTableName + " (tableName, lhs, rhs) VALUES (?,?,?)", (tableName, lhs, rhs))
                 self.conn.commit()
