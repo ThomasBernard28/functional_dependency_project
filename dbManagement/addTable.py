@@ -9,6 +9,7 @@ try:
     cursor = dbConnection.cursor()
 
     cursor.execute(dbQuery)
+    cursor.execute('''INSERT INTO SNCB VALUES ("0478199487", "Blaton")''')
     dbConnection.commit()
 
     cursor.close()

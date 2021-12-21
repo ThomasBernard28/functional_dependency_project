@@ -2,4 +2,4 @@
 Data Base bachelor project. 
 
 # dependencies
-```pip install click```
+```pip install PyInquirer```
