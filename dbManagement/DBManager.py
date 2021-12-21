@@ -95,3 +95,10 @@ class DBManager:
             for DF in records : 
                 result += DF[1] + " -----> " + DF[2] + "\n"
             print(result)
+
+
+    def getTables(self):
+        self.cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
+        records = self.cur.fetchall()
+        for r in records[0]:
+            print("> " + r + '\n')

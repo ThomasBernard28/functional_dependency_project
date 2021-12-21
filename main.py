@@ -8,7 +8,7 @@ mainMenu = [
         'type'    : 'list',
         'name'    : 'userOption',
         'message' : 'Welcome to functional dependency project',
-        'choices' : ["showTable", "addDF", "deleteDF","getAllDF", "quit"]
+        'choices' : ["getTables", "showTable", "addDF", "deleteDF","getAllDF", "quit"]
     }
 ]
 
@@ -23,6 +23,14 @@ showTableMenu = [
         'type'    : 'input',
         'name'    : 'table',
         'message' : 'Enter the table name'
+    }
+]
+
+getTablesMenu = [
+    {
+        'type'    : 'input',
+        'name'    : 'db',
+        'message' : 'Enter the data base name'
     }
 ]
 
@@ -49,20 +57,6 @@ DFMenu = [
         'type'    : 'input',
         'name'    : 'rhs',
         'message' : 'Enter rhs'
-    }
-]
-
-getDFMenu = [
-    {
-        'type'    : 'input',
-        'name'    : 'db',
-        'message' : 'Enter the data base name'
-    },
-
-    {
-        'type'    : 'input',
-        'name'    : 'table',
-        'message' : 'Enter the table name'
     }
 ]
 
@@ -99,11 +93,18 @@ def main():
         dbm.disconnect()
 
     elif answer1.get("userOption") == "getAllDF":
-        answer2 = prompt(getDFMenu)
+        answer2 = prompt(showTableMenu)
         db      = answer2.get("db")
         table   = answer2.get("table")
         dbm     = DBManager(db)
         dbm.displayDF(table)
+        dbm.disconnect()
+
+    elif answer1.get("userOption") == "getTables":
+        answer2 = prompt(getTablesMenu)
+        db      = answer2.get("db")
+        dbm     = DBManager(db)
+        dbm.getTables()
         dbm.disconnect()
 
     elif answer1.get("userOption") == "quit":
