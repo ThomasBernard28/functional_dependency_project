@@ -34,20 +34,22 @@ class DBManager:
 
     def addDF(self, dfTableName, tableName, lhs, rhs):
         try:
-            getTablesQuery = """SELECT name FROM sqlite_master WHERE type='table';"""
-            self.cur.execute(getTablesQuery)
+            self.cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
             records = self.cur.fetchall()
-            self.cur = self.conn.cursor()
             if dfTableName in records:
-                self.cur.execute("INSERT INTO " + dfTableName + " (tableName, lhs, rhs) VALUES (?,?,?)", (tableName, lhs, rhs))
-                self.conn.commit()
-
-            else:
-                createTableQuery = f"""CREATE TABLE {dfTableName} (tableName TEXT NOT NULL, lhs TEXT NOT NULL, rhs TEXT NOT NULL)"""
-                self.cur.execute(createTableQuery)
-                self.cur.execute("INSERT INTO "+ dfTableName + " (tableName, lhs, rhs) VALUES (?,?,?)", (tableName, lhs, rhs))
+                print("DF", dfTableName, "is detected in your database")
+                self.cur.execute("INSERT INTO {0} (tableName, lhs, rhs) VALUES ({1}, {2}, {3})".format(dfTableName,tableName, lhs, rhs))
                 self.conn.commit()
                 print("Your DF was successfully added to the dfTable in your database")
+
+            else:
+                print("creating a new DF table in your database")
+                self.cur.execute(f"CREATE TABLE {dfTableName} (tableName TEXT NOT NULL, lhs TEXT NOT NULL, rhs TEXT NOT NULL)")
+
+                self.cur.execute(f"INSERT INTO {dfTableName} (tableName, lhs, rhs) VALUES (?,?,?)", (tableName, lhs, rhs))
+
+                self.conn.commit()
+                print("Your DF was successfully added to the new dfTable in your database")
 
         except Error as error :
             print("Failed to add your DF, syntax might be incorect please be sure to enter  : \n dfTableName \n tableName \n lhs1 lhs2 lhsn \n rhs")
@@ -55,11 +57,9 @@ class DBManager:
 
     def deleteDF(self, dfTableName, tableName, lhs, rhs):
         try:
-            self.cur.execute("DELETE FROM "+ dfTableName +" WHERE tableName=\'"+tableName+"\' AND lhs=\'"+lhs+"\' AND rhs=\'" +rhs+"\'")
+            self.cur.execute("DELETE FROM {0} WHERE tableName=\'{1}\' AND lhs=\'{2}\' AND rhs=\'{3}\'".format(dfTableName, tableName, lhs, rhs))
             self.conn.commit()
             print("The DF was successfully deleted from the df table")
 
         except Error as error :
             print("The DF you tried to remove does not exist, please try with other arguments")
-
-    
