@@ -34,7 +34,7 @@ def main():
         db        = answer2.get("db")
         table     = answer2.get("table")
         dbm       = DBManager(db)
-        for data in dbm.showtable(table):
+        for data in dbm.showTable(table):
             print(data, '\n')
         dbm.disconnect()
 
