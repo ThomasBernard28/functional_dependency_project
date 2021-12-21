@@ -89,12 +89,17 @@ class DBManager:
         except Error as error:
             print("Failed to read data from sqlite table", error)
 
-    def displayDF(self, tableName):
-            records = self.getAllDF(tableName)
-            result = "Here are all the DF(s) of the "+records[0][0]+ " table :\n"
-            for DF in records : 
+    def displayDF(self, tableName): 
+        records = self.getAllDF(tableName)
+        result  = 0
+        for DF in records : 
+            if DF[0] == tableName:
+                if not result:
+                    result = "Here are all the DF(s) of the "+records[0][0]+ " table :\n"
                 result += DF[1] + " -----> " + DF[2] + "\n"
-            print(result)
+        if not result:
+            result = "No DF found for " + tableName
+        print(result)
 
 
     def getTables(self):

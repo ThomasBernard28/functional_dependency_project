@@ -1,4 +1,4 @@
-from PyInquirer import prompt
+from PyInquirer import prompt, Separator
 
 from dbManagement.DBManager import *
 
@@ -8,7 +8,7 @@ mainMenu = [
         'type'    : 'list',
         'name'    : 'userOption',
         'message' : 'Welcome to functional dependency project',
-        'choices' : ["getTables", "showTable", "addDF", "deleteDF","getAllDF", "quit"]
+        'choices' : ["getTables", "showTable", Separator(), "addDF", "deleteDF","getAllDF", Separator(), "quit"]
     }
 ]
 
