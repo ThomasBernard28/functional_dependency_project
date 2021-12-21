@@ -1,5 +1,5 @@
 # Functional dependency project
-unit test state : ![](https://github.com/MyName/my-project/workflows/Project%20Tests/badge.svg)
+unit tests state : ![](https://github.com/ThomasBernard28/functional_dependency_project/workflows/Project%20Tests/badge.svg)
 ## General infos 
 :warning: This project has only been tested on UNIX-like OS (MacOS and the GNU/Linux distribution fedora).
 
