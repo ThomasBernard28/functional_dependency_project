@@ -21,9 +21,9 @@ class DBManager:
         self.conn.close()
         
 
-    def getTable(self, table):
+    def getTable(self, tableName):
         try:
-            self.cur.execute("""SELECT * FROM """ + table)
+            self.cur.execute("""SELECT * FROM """ + tableName)
             records = self.cur.fetchall()
             if records == []:
                 return "The table is empty"
@@ -124,13 +124,13 @@ class DBManager:
         return tables
 
     
-    def searchKeys(self, table):
+    def searchKeys(self, tableName):
         attributs = []  # all attributes of the table (list of attributes)
         DF        = []  # all DF's of the table (list of tuples)
         DFleft    = []  # lhs
         DFright   = []  # rhs
 
-        for df in self.getAllDF(table):  # get all lhs and rhs of the given table
+        for df in self.getAllDF(tableName):  # get all lhs and rhs of the given table
             DFleft.append(df[1])
             DFright.append(df[2])
         
@@ -147,10 +147,10 @@ class DBManager:
                 tmp.append(r)
         DFright = tmp[:]
 
-        columns  = self.cur.execute(f"PRAGMA table_info({table})") # puts all attributes of the table in the attributes list
+        columns  = self.cur.execute(f"PRAGMA table_info({tableName})") # puts all attributes of the table in the attributes list
         for c in columns.fetchall():
             attributs.append(c[1])
-        DF = self.getAllDF(table)
+        DF = self.getAllDF(tableName)
         
         keys = []
         for a in attributs:         # puts attributes that are not in the DFright list in the keys list
