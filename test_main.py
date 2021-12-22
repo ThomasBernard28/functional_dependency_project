@@ -11,5 +11,5 @@ def test_addDF():
 def test_deleteDF():
     dbm = DBManager("DATABANANA")
     dbm.deleteDF("TestTable", "Testlhs1 Testlhs2", "Testrhs")
-    assert not ("TestTable", "Testlhs1 Testlhs2", "Testrhs") in dbm.showTable("FuncDep")
+    assert not ("TestTable", "Testlhs1 Testlhs2", "Testrhs") in dbm.getTable("FuncDep")
     dbm.disconnect()

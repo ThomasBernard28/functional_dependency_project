@@ -68,7 +68,7 @@ def main():
         db      = answer2.get("db")
         table   = answer2.get("table")
         dbm     = DBManager(db)
-        for data in dbm.showTable(table):
+        for data in dbm.getTable(table):
             print(data, '\n')
         dbm.disconnect()
 
@@ -104,7 +104,7 @@ def main():
         answer2 = prompt(getTablesMenu)
         db      = answer2.get("db")
         dbm     = DBManager(db)
-        dbm.getTables()
+        dbm.displayAllTables()
         dbm.disconnect()
 
     elif answer1.get("userOption") == "quit":

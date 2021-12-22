@@ -21,7 +21,7 @@ class DBManager:
         self.conn.close()
         
 
-    def showTable(self, table):
+    def getTable(self, table):
         try:
             self.cur.execute("""SELECT * FROM """ + table)
             records = self.cur.fetchall()
@@ -51,9 +51,7 @@ class DBManager:
             else:
                 print("creating a new FuncDep table in your database")
                 self.cur.execute(f"CREATE TABLE FuncDep (tableName TEXT NOT NULL, lhs TEXT NOT NULL, rhs TEXT NOT NULL)")
-
                 self.cur.execute("INSERT INTO FuncDep (tableName, lhs, rhs) VALUES (?,?,?)", (tableName, lhs, rhs))
-
                 self.conn.commit()
                 print("Your DF was successfully added to the new dfTable in your database")
 
@@ -65,9 +63,11 @@ class DBManager:
         try:
             self.cur.execute("SELECT * FROM FuncDep WHERE tableName=\'{0}\' AND lhs=\'{1}\' AND rhs=\'{2}\'".format(tableName, lhs, rhs))
             records = self.cur.fetchall()
+
             if records == []:
                 print("i'm here")
                 raise exception("The DF you tried to remove does not exist, please try with other arguments")
+
             else:
                 self.cur.execute("DELETE FROM FuncDep WHERE tableName=\'{0}\' AND lhs=\'{1}\' AND rhs=\'{2}\'".format(tableName, lhs, rhs))
                 self.conn.commit()
@@ -81,8 +81,10 @@ class DBManager:
         try:
             self.cur.execute("SELECT * FROM FuncDep WHERE tableName=\'{0}\'".format(tableName))
             records = self.cur.fetchall()
+
             if records == []:
                 raise exception("No DF defined for this table. You can create them with our application")
+
             else:
                 return records
 
@@ -92,18 +94,23 @@ class DBManager:
     def displayDF(self, tableName): 
         records = self.getAllDF(tableName)
         result  = 0
+
         for DF in records : 
             if DF[0] == tableName:
                 if not result:
                     result = "Here are all the DF(s) of the "+records[0][0]+ " table :\n"
                 result += DF[1] + " -----> " + DF[2] + "\n"
+
         if not result:
             result = "No DF found for " + tableName
+
         print(result)
 
-
-    def getTables(self):
+    def getAllTables(self):
         self.cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
         records = self.cur.fetchall()
-        for r in records[0]:
-            print("> " + r + '\n')
+        return records[0]
+
+    def displayAllTables(self):
+        for t in self.getAllTables():
+            print("> " + t + '\n')
