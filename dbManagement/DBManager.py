@@ -65,7 +65,6 @@ class DBManager:
             records = self.cur.fetchall()
 
             if records == []:
-                print("i'm here")
                 raise exception("The DF you tried to remove does not exist, please try with other arguments")
 
             else:
@@ -76,17 +75,28 @@ class DBManager:
         except Error as error :
             print("The DB your entered does not exist.")
 
+    def deleteAllDF(self, tableName):
+        try:
+            self.cur.execute("SELECT * FROM FuncDep WHERE tablename=\'{0}\'".format(tableName))
+            records = self.cur.fetchall()
+            
+            if records == []:
+                raise exception("There are no DF related to the table you entered to delete.")
+
+            else:
+                self.cur.execute("DELETE FROM FuncDep WHERE tableName=\'{0}\'".format(tableName))
+                self.conn.commit()
+                print("All the DF related to " + tableName + " were successfully deleted.")
+        
+        except Error as error:
+            print("The DB you entered does not exist", error)
 
     def getAllDF(self, tableName):
         try:
             self.cur.execute("SELECT * FROM FuncDep WHERE tableName=\'{0}\'".format(tableName))
             records = self.cur.fetchall()
 
-            if records == []:
-                raise exception("No DF defined for this table. You can create them with our application")
-
-            else:
-                return records
+            return records
 
         except Error as error:
             print("Failed to read data from sqlite table", error)

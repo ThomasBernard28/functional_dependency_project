@@ -2,15 +2,15 @@ from sqlite3 import *
 
 try: 
     dbConnection = connect('DATABANANA')
-    dbQuery = '''CREATE TABLE SNCB (
-                CinemaNom TEXT NOT NULL,
-                Rue TEXT NOT NULL,
-                Ville TEXT NOT NULL,
-                Telephone TEXT NOT NULL,
-                Titre TEXT NOT NULL,
-                Regisseur TEXT NOT NULL,
-                Duree TEXT NOT NULL,
-                Heure TEXT NOT NULL);'''
+    dbQuery = '''CREATE TABLE TEST2 (
+                A TEXT NOT NULL,
+                B TEXT NOT NULL,
+                C TEXT NOT NULL,
+                D TEXT NOT NULL,
+                E TEXT NOT NULL,
+                F TEXT NOT NULL,
+                G TEXT NOT NULL,
+                H TEXT NOT NULL);'''
 
     cursor = dbConnection.cursor()
 

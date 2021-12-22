@@ -8,7 +8,7 @@ mainMenu = [
         'type'    : 'list',
         'name'    : 'userOption',
         'message' : 'Welcome to functional dependency project',
-        'choices' : ["get all tables name", "show one table", Separator(), "add a DF", "delete a DF","get all DF of a table", Separator(), "search keys", Separator(), "quit"]
+        'choices' : ["get all tables name", "show one table", Separator(), "add a DF", "delete a DF","delete all DF of a table" ,"get all DF of a table", Separator(), "search keys", Separator(), "quit"]
     }
 ]
 
@@ -102,6 +102,15 @@ def main():
         table   = answer2.get("table")
         dbm     = DBManager(db)
         dbm.displayDF(table)
+        dbm.disconnect()
+
+    elif answer1.get("userOption") == "delete all DF of a table":
+        """delete all df of a table"""
+        answer2 = prompt(showTableMenu)
+        db      = answer2.get("db")
+        table   = answer2.get("table")
+        dbm     = DBManager(db)
+        dbm.deleteAllDF(table)
         dbm.disconnect()
 
     elif answer1.get("userOption") == "get all tables name":
