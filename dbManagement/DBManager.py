@@ -127,9 +127,12 @@ class DBManager:
         DFleft  = list(set(DFleft))
         DFright  = list(set(DFright))
         DF       = list(set(DFleft+ DFright))
-
+        columns  = self.cur.execute(f"PRAGMA table_info({table})")
+        for c in columns.fetchall():
+            attributs.append(c[1])
 
 
         print("attr : " + str(DF))
         print("left : " + str(DFleft))
         print("right: " + str(DFright))
+        print("table attr : " + str(attributs))
