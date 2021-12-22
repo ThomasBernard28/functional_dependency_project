@@ -108,8 +108,10 @@ class DBManager:
 
     def getAllTables(self):
         self.cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
-        records = self.cur.fetchall()
-        return records[0]
+        tables = []
+        for record in self.cur.fetchall()[0]:
+            tables.append(record)
+        return tables
 
     
     def searchKeys(self, table):
