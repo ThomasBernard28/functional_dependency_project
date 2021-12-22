@@ -128,7 +128,7 @@ def main():
         db      = answer2.get("db")
         table   = answer2.get("table")
         dbm     = DBManager(db)
-        dbm.searchKeys(table)
+        print("The candidate key is :",str(dbm.searchKeys(table)))
         dbm.disconnect()
 
     elif answer1.get("userOption") == "quit":

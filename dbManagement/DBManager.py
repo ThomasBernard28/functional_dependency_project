@@ -130,12 +130,11 @@ class DBManager:
         DFleft    = []  # lhs
         DFright   = []  # rhs
 
-        for df in self.getAllDF(table):
-            for a in df[1].split():
-                DFleft.append(a)
+        for df in self.getAllDF(table):  # get all lhs and rhs of the given table
+            DFleft.append(df[1])
             DFright.append(df[2])
         
-        # le pire algorithme du 21è siècle : 
+        # le pire algorithme du 21è siècle : delete all duplicates in the lists and keep the elements order
         tmp = []
         for l in DFleft:
             if l not in tmp:
@@ -148,13 +147,15 @@ class DBManager:
                 tmp.append(r)
         DFright = tmp[:]
 
-        columns  = self.cur.execute(f"PRAGMA table_info({table})")
-        
+        columns  = self.cur.execute(f"PRAGMA table_info({table})") # puts all attributes of the table in the attributes list
         for c in columns.fetchall():
             attributs.append(c[1])
         DF = self.getAllDF(table)
         
-        keys = attributs[:]
+        keys = []
+        for a in attributs:         # puts attributes that are not in the DFright list in the keys list
+            if a not in DFright:
+                keys.append(a)
         keyLen = len(keys)
         pointer = 0
 
@@ -178,8 +179,5 @@ class DBManager:
                 if not found:
                     pointer += 1
                     current = keys[pointer]
-        print(','.join(keys[:keyLen]))
 
-
-
-
+        return ''.join(keys[:keyLen])
