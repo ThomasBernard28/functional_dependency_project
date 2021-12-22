@@ -115,10 +115,10 @@ class DBManager:
 
     
     def searchKeys(self, table):
-        attributs = []
-        DF        = []
-        DFleft    = []
-        DFright   = []
+        attributs = []  # all attributes of the table (list of attributes)
+        DF        = []  # all DF's of the table (list of tuples)
+        DFleft    = []  # lhs
+        DFright   = []  # rhs
 
         for df in self.getAllDF(table):
             for a in df[1].split():
@@ -126,13 +126,7 @@ class DBManager:
             DFright.append(df[2])
         DFleft  = list(set(DFleft))
         DFright  = list(set(DFright))
-        DF       = list(set(DFleft+ DFright))
         columns  = self.cur.execute(f"PRAGMA table_info({table})")
         for c in columns.fetchall():
             attributs.append(c[1])
-
-
-        print("attr : " + str(DF))
-        print("left : " + str(DFleft))
-        print("right: " + str(DFright))
-        print("table attr : " + str(attributs))
+        DF = self.getAllDF(table)
