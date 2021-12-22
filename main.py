@@ -8,7 +8,7 @@ mainMenu = [
         'type'    : 'list',
         'name'    : 'userOption',
         'message' : 'Welcome to functional dependency project',
-        'choices' : ["get all tables name", "show one table", Separator(), "add a DF", "delete a DF","delete all DF of a table" ,"get all DF of a table", Separator(), "search keys", Separator(), "quit"]
+        'choices' : ["get table form",Separator(),"get all tables name", "show one table", Separator(), "add a DF", "delete a DF","delete all DF of a table" ,"get all DF of a table", Separator(), "search keys", Separator(), "quit"]
     }
 ]
 
@@ -71,6 +71,15 @@ def main():
         dbm     = DBManager(db)
         for data in dbm.getTable(table):
             print(data, '\n')
+        dbm.disconnect()
+
+    elif answer1.get("userOption") == "get table form":
+        """ Return the form of the table"""
+        answer2 = prompt(showTableMenu)
+        db      = answer2.get("db")
+        table   = answer2.get("table")
+        dbm     = DBManager(db)
+        dbm.getForm(table)
         dbm.disconnect()
 
     elif answer1.get("userOption") == "add a DF":
@@ -137,7 +146,7 @@ def main():
         db      = answer2.get("db")
         table   = answer2.get("table")
         dbm     = DBManager(db)
-        print("The candidate key is :",str(dbm.searchKeys(table)))
+        print("The candidate key is :",str(dbm.displayKeys(table)))
         dbm.disconnect()
 
     elif answer1.get("userOption") == "quit":

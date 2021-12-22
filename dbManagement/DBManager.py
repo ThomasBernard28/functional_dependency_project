@@ -200,4 +200,51 @@ class DBManager:
                     pointer += 1
                     current = keys[pointer]
 
-        return ''.join(keys[:keyLen])
+        return keys[:keyLen]
+    
+    def displayKeys(self, tableName):
+        keys = self.searchKeys(tableName)
+        return ''.join(keys)
+
+    def getForm(self, tableName):
+        if self.checkBCNF(tableName):
+            print("The table is in BCNF (and indeed in 3NF)")
+        else:
+            print("not yet implemented")
+                        
+    def checkBCNF(self, tableName):
+        keys = self.searchKeys(tableName)
+
+        print(keys)
+       
+        DF        = []  # all DF's of the table (list of tuples)
+        DFleft    = []  # lhs
+        DFright   = []  # rhs
+
+        for df in self.getAllDF(tableName):  # get all lhs and rhs of the given table
+            DFleft.append(df[1])
+            DFright.append(df[2])
+        
+        # le pire algorithme du 21è siècle : delete all duplicates in the lists and keep the elements order
+        tmp = []
+        for l in DFleft:
+            if l not in tmp:
+                tmp.append(l)
+        DFleft = tmp[:]
+
+        tmp = []
+        for r in DFright:
+            if r not in tmp:
+                tmp.append(r)
+        DFright = tmp[:]
+        
+        problemDF = []
+
+        for att in keys:
+            if (att in DFright) and (DFleft[DFright.index(att)] not in keys):
+                problemDF.append(DF[DFright.index(att)]
+        
+        if problemDF == []:
+            return True
+        return False
+
