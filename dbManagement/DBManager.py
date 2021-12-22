@@ -211,7 +211,7 @@ class DBManager:
             print("The table is in BCNF (and indeed in 3NF)")
         else:
             print("not yet implemented")
-                        
+    """                       
     def checkBCNF(self, tableName):
         keys = self.searchKeys(tableName)
 
@@ -247,4 +247,4 @@ class DBManager:
         if problemDF == []:
             return True
         return False
-
+    """
