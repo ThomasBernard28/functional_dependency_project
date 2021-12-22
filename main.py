@@ -101,7 +101,16 @@ def main():
         db      = answer2.get("db")
         table   = answer2.get("table")
         dbm     = DBManager(db)
-        dbm.displayDF(table)
+        result  = 0
+        DFList  = dbm.getAllDF(table)
+        for DF in DFList:
+            if DF[0] == table:
+                if not result:
+                    result = "Here are all the DF(s) of the "+DFList[0][0]+ " table :\n"
+                result += DF[1] + " -----> " + DF[2] + "\n"
+        if not result:
+            result = "No DF found for " + table
+        print(result)
         dbm.disconnect()
 
     elif answer1.get("userOption") == "delete all DF of a table":

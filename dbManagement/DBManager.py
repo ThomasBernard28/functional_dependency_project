@@ -1,4 +1,6 @@
 from sqlite3 import *
+import sys
+
 
 class DBManager:
     def __init__(self, dbName):
@@ -6,22 +8,31 @@ class DBManager:
 
 
     def connect(self, dbName):
+        """
+        Method to open a connection to a local database
+        """
         try:
             dbConnection = connect(dbName)
             cursor       = dbConnection.cursor()
-
             return dbConnection , cursor
 
-        except Error as error:
-            print("Error while connecting to sqlite", error)
+        except:
+            print("Error while connecting to sqlite")
+            sys.exit(1)
 
 
     def disconnect(self):
+        """
+        Method to disconnect from the local database
+        """
         self.cur.close()
         self.conn.close()
         
 
     def getTable(self, tableName):
+        """
+        This will return a list of tuple. Each tuple represent a row of the table in the database
+        """
         try:
             self.cur.execute("""SELECT * FROM """ + tableName)
             records = self.cur.fetchall()
@@ -29,11 +40,16 @@ class DBManager:
                 return "The table is empty"
             return records
 
-        except Error as error:
-            print("Failed to read data from sqlite table", error)
+        except:
+            print("Failed to read data from sqlite table")
+            sys.exit(1)
 
 
     def addDF(self, tableName, lhs, rhs):
+        """
+        This will add a new row in a FuncDep table of the database.
+        If FuncDep doesn't exists, it is created
+        """
         try:
             self.cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
             records = self.cur.fetchall()
@@ -55,68 +71,72 @@ class DBManager:
                 self.conn.commit()
                 print("Your DF was successfully added to the new dfTable in your database")
 
-        except Error as error :
+        except:
             print("Failed to add your DF, syntax might be incorect please be sure to enter  : \n dfTableName \n tableName \n lhs1 lhs2 lhsn \n rhs")
+            sys.exit(1)
         
 
     def deleteDF(self, tableName, lhs, rhs):
+        """
+        This will delete one DF in the FuncDep table of the database
+        """
         try:
             self.cur.execute("SELECT * FROM FuncDep WHERE tableName=\'{0}\' AND lhs=\'{1}\' AND rhs=\'{2}\'".format(tableName, lhs, rhs))
             records = self.cur.fetchall()
 
             if records == []:
-                raise exception("The DF you tried to remove does not exist, please try with other arguments")
+                print("The DF you tried to remove does not exist, please try with other arguments")
 
             else:
                 self.cur.execute("DELETE FROM FuncDep WHERE tableName=\'{0}\' AND lhs=\'{1}\' AND rhs=\'{2}\'".format(tableName, lhs, rhs))
                 self.conn.commit()
                 print("The DF was successfully deleted from the df table")
 
-        except Error as error :
+        except:
             print("The DB your entered does not exist.")
+            sys.exit(1)
+
 
     def deleteAllDF(self, tableName):
+        """
+        This will delete all DF about the given table in the FuncDep table of the database
+        """
         try:
             self.cur.execute("SELECT * FROM FuncDep WHERE tablename=\'{0}\'".format(tableName))
             records = self.cur.fetchall()
             
             if records == []:
-                raise exception("There are no DF related to the table you entered to delete.")
+                print("There are no DF related to the table you entered to delete.")
 
             else:
                 self.cur.execute("DELETE FROM FuncDep WHERE tableName=\'{0}\'".format(tableName))
                 self.conn.commit()
                 print("All the DF related to " + tableName + " were successfully deleted.")
         
-        except Error as error:
-            print("The DB you entered does not exist", error)
+        except:
+            print("The DB you entered does not exist")
+            sys.exit(1)
+
 
     def getAllDF(self, tableName):
+        """
+        This will return a list of tuple where each tuple is a DF about the given tabme.
+        The DF are found in the FuncDep table of the database
+        """
         try:
             self.cur.execute("SELECT * FROM FuncDep WHERE tableName=\'{0}\'".format(tableName))
             records = self.cur.fetchall()
-
             return records
 
-        except Error as error:
-            print("Failed to read data from sqlite table", error)
+        except:
+            print("Failed to read data from sqlite table")
+            sys.exit(1)
 
-    def displayDF(self, tableName): 
-        records = self.getAllDF(tableName)
-        result  = 0
-
-        for DF in records : 
-            if DF[0] == tableName:
-                if not result:
-                    result = "Here are all the DF(s) of the "+records[0][0]+ " table :\n"
-                result += DF[1] + " -----> " + DF[2] + "\n"
-
-        if not result:
-            result = "No DF found for " + tableName
-
-        print(result)
 
     def getAllTables(self):
+        """
+        This will return a list of all table's name of the database
+        """
         self.cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
         tables = []
         for record in self.cur.fetchall():
