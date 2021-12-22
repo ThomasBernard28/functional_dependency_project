@@ -110,7 +110,7 @@ def main():
         db      = answer2.get("db")
         dbm     = DBManager(db)
         for t in dbm.getAllTables():
-            print("> " + t + '\n')
+            print("> " + t)
         dbm.disconnect()
 
     elif answer1.get("userOption") == "search keys":
