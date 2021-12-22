@@ -134,9 +134,41 @@ class DBManager:
             for a in df[1].split():
                 DFleft.append(a)
             DFright.append(df[2])
+        
         DFleft  = list(set(DFleft))
         DFright  = list(set(DFright))
         columns  = self.cur.execute(f"PRAGMA table_info({table})")
+        
         for c in columns.fetchall():
             attributs.append(c[1])
         DF = self.getAllDF(table)
+        
+        keys = attributs[:]
+        keyLen = len(keys)
+        pointer = 0
+
+        for rhs in DFright:
+            if rhs in keys:
+                keys.remove(rhs)
+        
+        current = keys[0]
+        while pointer < keyLen:
+            if current in DFleft:
+                keys.append(DFright[DFleft.index(current)])
+                print(keys)
+                current = DFright[DFleft.index(current)]
+            else :
+                for l in DFleft:
+                    if current in l.split():
+                        keys.append(DFright[DFleft.index(l)])
+                        print(keys)
+                        current = DFright[DFleft.index(l)]               
+                        continue 
+                
+                pointer += 1
+                current = keys[pointer]
+        print(','.join(keys[:keyLen]))
+
+
+
+
