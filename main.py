@@ -104,7 +104,8 @@ def main():
         answer2 = prompt(getTablesMenu)
         db      = answer2.get("db")
         dbm     = DBManager(db)
-        dbm.displayAllTables()
+        for t in dbm.getAllTables():
+            print("> " + t + '\n')
         dbm.disconnect()
 
     elif answer1.get("userOption") == "quit":

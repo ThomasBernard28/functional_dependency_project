@@ -110,7 +110,3 @@ class DBManager:
         self.cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
         records = self.cur.fetchall()
         return records[0]
-
-    def displayAllTables(self):
-        for t in self.getAllTables():
-            print("> " + t + '\n')
