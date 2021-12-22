@@ -135,8 +135,19 @@ class DBManager:
                 DFleft.append(a)
             DFright.append(df[2])
         
-        DFleft  = list(set(DFleft))
-        DFright  = list(set(DFright))
+        # le pire algorithme du 21è siècle : 
+        tmp = []
+        for l in DFleft:
+            if l not in tmp:
+                tmp.append(l)
+        DFleft = tmp[:]
+
+        tmp = []
+        for r in DFright:
+            if r not in tmp:
+                tmp.append(r)
+        DFright = tmp[:]
+
         columns  = self.cur.execute(f"PRAGMA table_info({table})")
         
         for c in columns.fetchall():
@@ -155,18 +166,18 @@ class DBManager:
         while pointer < keyLen:
             if current in DFleft:
                 keys.append(DFright[DFleft.index(current)])
-                print(keys)
                 current = DFright[DFleft.index(current)]
             else :
+                found = False
                 for l in DFleft:
                     if current in l.split():
                         keys.append(DFright[DFleft.index(l)])
-                        print(keys)
                         current = DFright[DFleft.index(l)]               
-                        continue 
-                
-                pointer += 1
-                current = keys[pointer]
+                        found = True
+               
+                if not found:
+                    pointer += 1
+                    current = keys[pointer]
         print(','.join(keys[:keyLen]))
 
 
