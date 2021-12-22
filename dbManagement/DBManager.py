@@ -110,3 +110,24 @@ class DBManager:
         self.cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
         records = self.cur.fetchall()
         return records[0]
+
+    
+    def searchKeys(self, table):
+        attributs = []
+        DF        = []
+        DFleft    = []
+        DFright   = []
+
+        for df in self.getAllDF(table):
+            for a in df[1].split():
+                DFleft.append(a)
+            DFright.append(df[2])
+        DFleft  = list(set(DFleft))
+        DFright  = list(set(DFright))
+        DF       = list(set(DFleft+ DFright))
+
+
+
+        print("attr : " + str(DF))
+        print("left : " + str(DFleft))
+        print("right: " + str(DFright))
