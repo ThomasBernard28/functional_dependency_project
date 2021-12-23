@@ -152,29 +152,107 @@ class DBManager:
             attributs.append(c[1])
         return attributs
 
-    def getClosure(self, tableName, attrList):
+    def getClosure(self, tableName, attrList, attributesFull):
         DF      = [] #all DF's of the table (list of tuples)
         DFright = []
 
-        for df in self.getAllDF(tableName):  # get all lhs and rhs of the given table
-            DF.append((df[0], df[1]))
-            DFright.append(df[1])
+        for df in self.getAllDF(tableName):
+            DF.append((df[1], df[2]))
+            DFright.append(df[2])
 
-
+        
         key = []
 
-        for a in attrList:
+        for a in attributesFull:
             if a not in DFright:
                 key.append(a)
         
-        while True:
-            old_key = key
+        resultKey = key[:]
+
+        for att in resultKey:
             for df in DF:
-                for d in DF:
-                    if d[0] == df[1]:
-                        key.append(d[1])
-            if key == old_key:
-                return key
+                if att in df[0].split() and df[1] not in key:
+                    key.append(df[1])
+        for df in DF:
+            for d in DF:
+                if df[1] in d[0].split() and d[1] not in key:
+                    key.append(d[1])
+        
+        isEqual = True
+        for a in attributesFull:
+            if a not in key:
+                isEqual = False
+        
+        if isEqual:
+            return (key,resultKey)
+        else:
+            return 0
+    
+    def searchKeys(self, tableName):
+        
+        """ get DF only in rhs and DF only in lhs"""
+
+        DF      = []
+        DFleft  = []
+        DFright = []
+
+        for df in self.getAllDF(tableName):
+            DF.append((df[1], df[2]))
+            DFleft.append(df[1])
+            DFright.append(df[2])
+        """ to remove duplicates in DFleft and DFright """
+
+        tmp = []
+        for l in DFleft:
+            if l not in tmp:
+                tmp.append(l)
+        DFleft = tmp[:]
+
+        tmp = []
+        for r in DFright:
+            if r not in tmp:
+                tmp.append(r)
+        DFright = tmp[:]
+
+        """ get attributes of the table """
+
+        attributes = []
+        attributesFull = self.getTableAttributs(tableName) # all the attributes table
+        for a in attributesFull:     # add the attributes that are neither in rhs nor in lhs
+
+            if a not in DFright and a not in DFleft:
+                attributes.append(a)
+        """ get attributes that are in rhs and lhs """
+
+        DFboth = []
+        for l in DFleft:
+            for r in DFright:
+                if l == r:
+                    DFboth.append(l)
+        """ get the attributes that are not in rhs """
+        notInRhs = attributes + DFleft
+        
+        keys = self.getClosure(tableName, notInRhs, attributesFull)
+        if keys == 0:
+            return "No key"
+        
+        elif set(keys[0]) == set(attributesFull):
+            return keys[1]
+
+        else :
+            result = []
+            old_notInRhs = notInRhs[:]
+            for att in DFboth:
+                notInRhs = old_notInRhs[:]
+                notInRhs.append(att)
+                keys = self.getClosure(tableName, notInRhs, attributesFull)
+
+                if keys == 0:
+                    return "No key"
+
+                elif set(attributesFull) == set(keys[0]):
+                    result += notInRhs
+        return result
 
     def displayKeys(self, tableName):
         keys = self.searchKeys(tableName)
@@ -190,6 +268,8 @@ class DBManager:
             for df in bcnf[1]:
                 dfs.append(((df[0], df[1], "----->", df[2])))
             print(tabulate(dfs))
+
+            #thirdNF = self.check3NF(tableName, bcnf[1])
          
 
     def checkBCNF(self, tableName):
@@ -225,3 +305,6 @@ class DBManager:
                 problemDF.append((tableName, l, r))
                 bcnf = False
         return (bcnf, problemDF)
+    
+    #def check3NF(self, tableName, problemDF):
+
