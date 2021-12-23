@@ -164,7 +164,7 @@ class DBManager:
         key = []
 
         for a in attributesFull:
-            if a not in DFright:
+            if a not in DFright and a in attrList:
                 key.append(a)
         
         resultKey = key[:]
@@ -265,9 +265,9 @@ class DBManager:
         else:
             print("The table is not in BCNF. Because of :")
             dfs = []
+            print(bcnf[1])
             for df in bcnf[1]:
-                dfs.append(((df[0], df[1], "----->", df[2])))
-            print(tabulate(dfs))
+                dfs += df
 
             #thirdNF = self.check3NF(tableName, bcnf[1])
          
@@ -278,7 +278,8 @@ class DBManager:
         DF        = self.getAllDF(tableName)  # all DF's of the table (list of tuples)
         DFleft    = []  # lhs
         DFright   = []  # rhs
-
+        attributes = self.getTableAttributs(tableName) # all the attributes table
+        
         for df in self.getAllDF(tableName):  # get all lhs and rhs of the given table
             DFleft.append(df[1])
             DFright.append(df[2])
@@ -298,13 +299,19 @@ class DBManager:
         
         problemDF = []
         bcnf      = True
-
-        for l in DFleft:
-            r = DFright[DFleft.index(l)]
-            if not r in l.split() and ''.join(l.split()) != ''.join(keys):
-                problemDF.append((tableName, l, r))
+        
+        for df in DF:
+            closure = self.getClosure(tableName, df[1], attributes)
+            if closure == 0:
                 bcnf = False
+                problemDF += df
+
+            elif df[2] in df[1].split() or (set(attributes) == set(closure[0])):
+                pass
+            else:
+                bcnf = False
+                problemDF += df
+        
         return (bcnf, problemDF)
-    
     #def check3NF(self, tableName, problemDF):
 
