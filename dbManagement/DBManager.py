@@ -143,12 +143,20 @@ class DBManager:
             tables.append(record[0])
         return tables
 
+
+    def getTableAttributs(self, tableName):
+        attributs = []
+        columns   = self.cur.execute(f"PRAGMA table_info({tableName})") # puts all attributes of the table in the attributes list
+        for c in columns.fetchall():
+            attributs.append(c[1])
+        return attributs
+
     
     def searchKeys(self, tableName):
-        attributs = []  # all attributes of the table (list of attributes)
-        DF        = []  # all DF's of the table (list of tuples)
-        DFleft    = []  # lhs
-        DFright   = []  # rhs
+        attributs = self.getTableAttributs(tableName)  # all attributes of the table (list of attributes)
+        DF        = []                                 # all DF's of the table (list of tuples)
+        DFleft    = []                                 # lhs
+        DFright   = []                                 # rhs
 
         for df in self.getAllDF(tableName):  # get all lhs and rhs of the given table
             DFleft.append(df[1])
@@ -167,9 +175,6 @@ class DBManager:
                 tmp.append(r)
         DFright = tmp[:]
 
-        columns  = self.cur.execute(f"PRAGMA table_info({tableName})") # puts all attributes of the table in the attributes list
-        for c in columns.fetchall():
-            attributs.append(c[1])
         DF = self.getAllDF(tableName)
         
         keys = []
@@ -211,11 +216,9 @@ class DBManager:
             print("The table is in BCNF (and indeed in 3NF)")
         else:
             print("not yet implemented")
-    """                       
+         
     def checkBCNF(self, tableName):
-        keys = self.searchKeys(tableName)
-
-        print(keys)
+        keys = list(self.searchKeys(tableName))
        
         DF        = []  # all DF's of the table (list of tuples)
         DFleft    = []  # lhs
@@ -242,9 +245,8 @@ class DBManager:
 
         for att in keys:
             if (att in DFright) and (DFleft[DFright.index(att)] not in keys):
-                problemDF.append(DF[DFright.index(att)]
+                problemDF.append(DF[DFright.index(att)])
         
         if problemDF == []:
             return True
         return False
-    """

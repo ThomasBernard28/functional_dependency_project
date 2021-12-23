@@ -1,4 +1,5 @@
 from PyInquirer import prompt, Separator
+from tabulate import tabulate
 
 from dbManagement.DBManager import *
 
@@ -8,7 +9,7 @@ mainMenu = [
         'type'    : 'list',
         'name'    : 'userOption',
         'message' : 'Welcome to functional dependency project',
-        'choices' : ["get table form",Separator(),"get all tables name", "show one table", Separator(), "add a DF", "delete a DF","delete all DF of a table" ,"get all DF of a table", Separator(), "search keys", Separator(), "quit"]
+        'choices' : ["get all tables name", "show one table", "get table form", Separator(), "add a DF", "delete a DF","delete all DF of a table" ,"get all DF of a table", Separator(), "search keys", Separator(), "quit"]
     }
 ]
 
@@ -69,8 +70,18 @@ def main():
         db      = answer2.get("db")
         table   = answer2.get("table")
         dbm     = DBManager(db)
-        for data in dbm.getTable(table):
-            print(data, '\n')
+        record  = dbm.getTable(table)
+        if record == "The table is empty":
+            print(record)
+        else:
+            headers = dbm.getTableAttributs(table)
+            print(tabulate(record, headers=headers))
+        """
+            for r in record:
+                for data in r:
+                    print(data, '  ', end="")
+                print('\n')
+        """
         dbm.disconnect()
 
     elif answer1.get("userOption") == "get table form":
@@ -110,16 +121,16 @@ def main():
         db      = answer2.get("db")
         table   = answer2.get("table")
         dbm     = DBManager(db)
-        result  = 0
+        result  = []
         DFList  = dbm.getAllDF(table)
         for DF in DFList:
             if DF[0] == table:
-                if not result:
-                    result = "Here are all the DF(s) of the "+DFList[0][0]+ " table :\n"
-                result += DF[1] + " -----> " + DF[2] + "\n"
-        if not result:
-            result = "No DF found for " + table
-        print(result)
+                if result == []:
+                    print("Here are all the DF(s) of the "+DFList[0][0]+ " table :")
+                result.append((DF[1], " -----> ", DF[2]))
+        if result == []:
+            result.append(("No DF found for " + table))
+        print(tabulate(result))
         dbm.disconnect()
 
     elif answer1.get("userOption") == "delete all DF of a table":
