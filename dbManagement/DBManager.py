@@ -243,19 +243,8 @@ class DBManager:
         
         problemDF = []
 
-        print(DFleft)
         for l in DFleft:
             r = DFright[DFleft.index(l)]
             if not r in l.split() and ''.join(l.split()) != ''.join(keys):
                 return False
         return True
-        """
-        for att in keys:
-            if (att in DFright) and (DFleft[DFright.index(att)] not in keys):
-                problemDF.append(DF[DFright.index(att)])
-                print(problemDF)
-        
-        if problemDF == []:
-            return True
-        return False
-        """
