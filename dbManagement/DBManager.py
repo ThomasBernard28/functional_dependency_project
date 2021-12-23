@@ -207,16 +207,19 @@ class DBManager:
 
         return keys[:keyLen]
     
+
     def displayKeys(self, tableName):
         keys = self.searchKeys(tableName)
         return ''.join(keys)
 
     def getForm(self, tableName):
-        if self.checkBCNF(tableName):
+        bcnf = self.checkBCNF(tableName)
+        if bcnf[0]:
             print("The table is in BCNF (and indeed in 3NF)")
         else:
-            print("The table is not in BCNF")
+            print("The table is not in BCNF. Because of :", bcnf[1])
          
+
     def checkBCNF(self, tableName):
         keys = list(self.searchKeys(tableName))
        
@@ -242,9 +245,11 @@ class DBManager:
         DFright = tmp[:]
         
         problemDF = []
+        bcnf      = True
 
         for l in DFleft:
             r = DFright[DFleft.index(l)]
             if not r in l.split() and ''.join(l.split()) != ''.join(keys):
-                return False
-        return True
+                problemDF.append((tableName, l, r))
+                bcnf = False
+        return (bcnf, problemDF)
