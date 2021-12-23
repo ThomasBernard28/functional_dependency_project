@@ -189,16 +189,20 @@ class DBManager:
                 keys.remove(rhs)
         
         current = keys[0]
+        tmpl = DFleft[:]
+        tmpr = DFright[:]
         while pointer < keyLen:
-            if current in DFleft:
-                keys.append(DFright[DFleft.index(current)])
-                current = DFright[DFleft.index(current)]
+            if current in tmpl:
+                keys.append(tmpr[tmpl.index(current)])
+                current = tmpr[tmpl.index(current)]
             else :
                 found = False
-                for l in DFleft:
+                for l in tmpl:
                     if current in l.split():
-                        keys.append(DFright[DFleft.index(l)])
-                        current = DFright[DFleft.index(l)]               
+                        keys.append(tmpr[tmpl.index(l)])
+                        current = tmpr[tmpl.index(l)]               
+                        tmpr.remove(tmpr[tmpl.index(l)])
+                        tmpl.remove(l)
                         found = True
                
                 if not found:
