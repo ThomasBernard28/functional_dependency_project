@@ -152,66 +152,29 @@ class DBManager:
             attributs.append(c[1])
         return attributs
 
-    
-    def searchKeys(self, tableName):
-        attributs = self.getTableAttributs(tableName)  # all attributes of the table (list of attributes)
-        DF        = []                                 # all DF's of the table (list of tuples)
-        DFleft    = []                                 # lhs
-        DFright   = []                                 # rhs
+    def getClosure(self, tableName, attrList):
+        DF      = [] #all DF's of the table (list of tuples)
+        DFright = []
 
         for df in self.getAllDF(tableName):  # get all lhs and rhs of the given table
-            DFleft.append(df[1])
-            DFright.append(df[2])
-        
-        # le pire algorithme du 21è siècle : delete all duplicates in the lists and keep the elements order
-        tmp = []
-        for l in DFleft:
-            if l not in tmp:
-                tmp.append(l)
-        DFleft = tmp[:]
+            DF.append((df[0], df[1]))
+            DFright.append(df[1])
 
-        tmp = []
-        for r in DFright:
-            if r not in tmp:
-                tmp.append(r)
-        DFright = tmp[:]
 
-        DF = self.getAllDF(tableName)
-        
-        keys = []
-        for a in attributs:         # puts attributes that are not in the DFright list in the keys list
+        key = []
+
+        for a in attrList:
             if a not in DFright:
-                keys.append(a)
-        keyLen = len(keys)
-        pointer = 0
-
-        for rhs in DFright:
-            if rhs in keys:
-                keys.remove(rhs)
+                key.append(a)
         
-        current = keys[0]
-        tmpl = DFleft[:]
-        tmpr = DFright[:]
-        while pointer < keyLen:
-            if current in tmpl:
-                keys.append(tmpr[tmpl.index(current)])
-                current = tmpr[tmpl.index(current)]
-            else :
-                found = False
-                for l in tmpl:
-                    if current in l.split():
-                        keys.append(tmpr[tmpl.index(l)])
-                        current = tmpr[tmpl.index(l)]               
-                        tmpr.remove(tmpr[tmpl.index(l)])
-                        tmpl.remove(l)
-                        found = True
-               
-                if not found:
-                    pointer += 1
-                    current = keys[pointer]
-
-        return keys[:keyLen]
-    
+        while True:
+            old_key = key
+            for df in DF:
+                for d in DF:
+                    if d[0] == df[1]:
+                        key.append(d[1])
+            if key == old_key:
+                return key
 
     def displayKeys(self, tableName):
         keys = self.searchKeys(tableName)
