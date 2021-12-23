@@ -215,12 +215,12 @@ class DBManager:
         if self.checkBCNF(tableName):
             print("The table is in BCNF (and indeed in 3NF)")
         else:
-            print("not yet implemented")
+            print("The table is not in BCNF")
          
     def checkBCNF(self, tableName):
         keys = list(self.searchKeys(tableName))
        
-        DF        = []  # all DF's of the table (list of tuples)
+        DF        = self.getAllDF(tableName)  # all DF's of the table (list of tuples)
         DFleft    = []  # lhs
         DFright   = []  # rhs
 
@@ -243,10 +243,19 @@ class DBManager:
         
         problemDF = []
 
+        print(DFleft)
+        for l in DFleft:
+            r = DFright[DFleft.index(l)]
+            if not r in l.split() and ''.join(l.split()) != ''.join(keys):
+                return False
+        return True
+        """
         for att in keys:
             if (att in DFright) and (DFleft[DFright.index(att)] not in keys):
                 problemDF.append(DF[DFright.index(att)])
+                print(problemDF)
         
         if problemDF == []:
             return True
         return False
+        """
