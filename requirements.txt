@@ -1,3 +1,4 @@
 PyInquirer
 pytest
 tabulate
+prompt_toolkit==1.0.14
