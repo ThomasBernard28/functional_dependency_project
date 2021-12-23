@@ -1,4 +1,5 @@
 from sqlite3 import *
+from tabulate import tabulate
 import sys
 
 
@@ -221,7 +222,11 @@ class DBManager:
         if bcnf[0]:
             print("The table is in BCNF (and indeed in 3NF)")
         else:
-            print("The table is not in BCNF. Because of :", bcnf[1])
+            print("The table is not in BCNF. Because of :")
+            dfs = []
+            for df in bcnf[1]:
+                dfs.append(((df[0], df[1], "----->", df[2])))
+            print(tabulate(dfs))
          
 
     def checkBCNF(self, tableName):
