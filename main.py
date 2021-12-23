@@ -13,6 +13,15 @@ mainMenu = [
     }
 ]
 
+confirmMenu = [
+    {
+        'type'    : 'confirm',
+        'message' : 'Do you want to continue ?',
+        'name'    : 'continue',
+        'default' : True
+    }
+]
+
 showTableMenu = [
     {
         'type'    : 'input',
@@ -166,4 +175,12 @@ def main():
         
 
 if __name__ == '__main__':
-    main()
+    a = 1
+    while a != 0:
+        a = main()
+        if a != 0:
+            answer = prompt(confirmMenu)
+            if not answer.get("continue"):
+                a = 0
+
+
